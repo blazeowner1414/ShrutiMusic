@@ -1,4 +1,5 @@
 import time
+import random
 
 from pyrogram import filters
 from pyrogram.enums import ChatType
@@ -23,6 +24,19 @@ from ShrutiMusic.utils.formatters import get_readable_time
 from ShrutiMusic.utils.inline import help_pannel_page1, private_panel, start_panel
 from config import BANNED_USERS
 from strings import get_string
+
+# ================== START IMAGES ================== #
+
+# Yaha pe apne direct image URLs daal
+# Agar t.me links se photo na aaye to unko telegra.ph / graph.org direct link me convert karke yaha paste karna.
+START_IMAGES = [
+    "https://t.me/blaze_photo_shop/3",
+    "https://t.me/blaze_photo_shop/2",
+]
+
+def get_start_image() -> str:
+    """Random welcome image."""
+    return random.choice(START_IMAGES)
 
 
 # ================== PRIVATE START ================== #
@@ -55,14 +69,14 @@ async def start_pm(client, message: Message, _):
                 )
             ],
             [
-                InlineKeyboardButton("📢 Updates", url=config.SUPPORT_GROUP),
+                InlineKeyboardButton("📢 Updates", url=config.SUPPORT_CHANNEL),
                 InlineKeyboardButton("💬 Support", url=config.SUPPORT_GROUP),
             ],
         ]
     )
 
     await message.reply_photo(
-        photo=config.START_IMG_URL,
+        photo=get_start_image(),
         caption=text,
         reply_markup=buttons,
     )
@@ -70,7 +84,8 @@ async def start_pm(client, message: Message, _):
     if await is_on_off(2):
         await app.send_message(
             config.LOG_GROUP_ID,
-            f"{message.from_user.mention} started the bot\nID: {message.from_user.id}",
+            f"{message.from_user.mention} started the bot.\n"
+            f"ID: <code>{message.from_user.id}</code>",
         )
 
 
@@ -89,7 +104,7 @@ async def start_gp(client, message: Message, _):
     )
 
     await message.reply_photo(
-        photo=config.START_IMG_URL,
+        photo=get_start_image(),
         caption=text,
         reply_markup=InlineKeyboardMarkup(start_panel(_)),
     )
@@ -101,23 +116,53 @@ async def start_gp(client, message: Message, _):
 @app.on_message(filters.new_chat_members)
 async def welcome(client, message: Message):
     for member in message.new_chat_members:
-        if member.id == app.id:
+        try:
+            # Agar koi banned user hai to kick
+            if await is_banned_user(member.id):
+                try:
+                    await message.chat.ban_member(member.id)
+                except:
+                    pass
 
-            if message.chat.type != ChatType.SUPERGROUP:
-                await message.reply_text("❌ Please add me in a supergroup.")
-                return await app.leave_chat(message.chat.id)
+            # Bot khud group me join hua
+            if member.id == app.id:
 
-            text = (
-                "🎉 **THANKS FOR ADDING BLAZE MUSIC!** 🎉\n\n"
-                "🎧 High Quality Group Music\n"
-                "⚡ Fast & Smooth Streaming\n\n"
-                "👉 Type `/play song name` to begin!"
-            )
+                # Supergroup check
+                if message.chat.type != ChatType.SUPERGROUP:
+                    await message.reply_text("❌ Please add me in a supergroup.")
+                    return await app.leave_chat(message.chat.id)
 
-            await message.reply_photo(
-                photo=config.START_IMG_URL,
-                caption=text,
-                reply_markup=InlineKeyboardMarkup(start_panel(get_string(await get_lang(message.chat.id)))),
-            )
+                # Blacklisted chat check
+                if message.chat.id in await blacklisted_chats():
+                    await message.reply_text(
+                        _["start_5"].format(
+                            app.mention,
+                            f"https://t.me/{app.username}?start=sudolist",
+                            config.SUPPORT_GROUP,
+                        ),
+                        disable_web_page_preview=True,
+                    )
+                    return await app.leave_chat(message.chat.id)
 
-            await add_served_chat(message.chat.id)
+                # Language string lo
+                language = await get_lang(message.chat.id)
+                __ = get_string(language)
+
+                text = (
+                    "🎉 **THANKS FOR ADDING BLAZE MUSIC!** 🎉\n\n"
+                    "🎧 High Quality Group Music\n"
+                    "⚡ Fast & Smooth Streaming\n\n"
+                    "👉 Type `/play song name` to begin!"
+                )
+
+                await message.reply_photo(
+                    photo=get_start_image(),
+                    caption=text,
+                    reply_markup=InlineKeyboardMarkup(start_panel(__)),
+                )
+
+                await add_served_chat(message.chat.id)
+                await message.stop_propagation()
+
+        except Exception as ex:
+            print(ex)
