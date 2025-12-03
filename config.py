@@ -112,18 +112,22 @@ AUTO_LEAVING_ASSISTANT = bool(os.getenv("AUTO_LEAVING_ASSISTANT", False))
 # 🖼️ Image URLs (Can be customized)
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-START_IMG_URL = os.getenv("START_IMG_URL", "https://files.catbox.moe/7q8bfg.jpg")
-PING_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
-PLAYLIST_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
-STATS_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
-TELEGRAM_AUDIO_URL = "https://files.catbox.moe/eehxb4.jpg"
-TELEGRAM_VIDEO_URL = "https://files.catbox.moe/eehxb4.jpg"
-STREAM_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
-SOUNCLOUD_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
-YOUTUBE_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
-SPOTIFY_ARTIST_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
-SPOTIFY_ALBUM_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
-SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
+START_IMG_URL = "https://t.me/blaze_photo_shop/3"
+PING_IMG_URL = "https://t.me/blaze_photo_shop/4"
+
+PLAYLIST_IMG_URL = "https://t.me/blaze_photo_shop/3"
+STATS_IMG_URL = "https://t.me/blaze_photo_shop/3"
+
+TELEGRAM_AUDIO_URL = "https://t.me/blaze_photo_shop/3"
+TELEGRAM_VIDEO_URL = "https://t.me/blaze_photo_shop/3"
+STREAM_IMG_URL = "https://t.me/blaze_photo_shop/3"
+
+SOUNCLOUD_IMG_URL = "https://t.me/blaze_photo_shop/3"
+YOUTUBE_IMG_URL = "https://t.me/blaze_photo_shop/3"
+
+SPOTIFY_ARTIST_IMG_URL = "https://t.me/blaze_photo_shop/3"
+SPOTIFY_ALBUM_IMG_URL = "https://t.me/blaze_photo_shop/3"
+SPOTIFY_PLAYLIST_IMG_URL = "https://t.me/blaze_photo_shop/3"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 🔐 User & Bot State Stores
